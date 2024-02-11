@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""filter logger"""
+"""filter logger alxxxx"""
 import re
 
 
-def filter_datum(fields: list[str],
-                 redaction: str,
-                 message: str,
-                 separator: str) -> str:
-    """filter_datum that returns the log message obfuscated"""
-    for field in fields:
-        field_regex = r'{}=(.*?){}'.format(field, separator)
-        message = re.sub(field_regex, f'{field}={redaction}{separator}',
-                         message)
-    return message
+def filter_datum(f: list[str], r: str, m: str, s: str) -> str:
+    """filter_datum that returns the log m obfuscated"""
+    for f_ in f:
+        f__regex = r'{}=(.*?){}'.format(f_, s)
+        m = re.sub(f__regex, f'{f_}={r}{s}', m)
+    return m
