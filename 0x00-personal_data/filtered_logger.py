@@ -50,6 +50,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main() -> None:
+    """this is a main function"""
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT COUNT(*) FROM users;")
