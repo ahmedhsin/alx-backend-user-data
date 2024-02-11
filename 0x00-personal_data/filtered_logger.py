@@ -7,8 +7,6 @@ import logging
 import mysql.connector
 import os
 
-from pynvim import Host
-
 
 PII_FIELDS = ("name", "email", "ssn", "phone", "password")
 
