@@ -39,12 +39,27 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
     dbhost = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
     dbname = os.environ.get('PERSONAL_DATA_DB_NAME', None)
-    return mysql.connector.connection.MySQLConnection(
+    connection = mysql.connector.connection.MySQLConnection(
         user=username,
         password=password,
         host=dbhost,
         database=dbname
     )
+
+    return connection
+
+
+def main() -> None:
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users;")
+    logger = get_logger()
+    fields = ['name', 'email',
+              'phone', 'ssn', 'password', 'ip',
+              'last_login', 'user_agent']
+    for row in cursor:
+        ros = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, fields)).strip()
+        logger.info(ros)
 
 
 class RedactingFormatter(logging.Formatter):
