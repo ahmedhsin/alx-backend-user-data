@@ -24,11 +24,11 @@ def before_request():
     authReq = auth.require_auth(request.path, ['/api/v1/status/',
                                                '/api/v1/unauthorized/',
                                                '/api/v1/forbidden/'])
-    if authReq:
+    if not authReq:
         pass
-    if auth.authorization_header(request) is None:
+    elif auth.authorization_header(request) is None:
         abort(401)
-    if auth.current_user(request) is None:
+    elif auth.current_user(request) is None:
         abort(403)
 
 
@@ -60,4 +60,4 @@ if __name__ == "__main__":
     if AUTH_TYPE == 'auth':
         from api.v1.auth.auth import Auth
         auth = Auth()
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
