@@ -10,7 +10,7 @@ class Auth():
     """class for auth"""
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """func"""
+        """func to check if auth or not"""
         if path is not None:
             if path[-1] != '/':
                 path += '/'
@@ -21,7 +21,7 @@ class Auth():
         return False
 
     def authorization_header(self, request=None) -> str:
-        """auth header"""
+        """auth header get the token"""
         if request is None:
             return None
         auth = request.headers.get('Authorization')
@@ -30,5 +30,5 @@ class Auth():
         return auth
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """get current user"""
+        """get current user if exists"""
         return None
