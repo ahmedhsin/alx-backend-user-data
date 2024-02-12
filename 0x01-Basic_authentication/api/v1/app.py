@@ -19,7 +19,7 @@ auth = None
 def before_request():
     """func excute before req"""
     if auth is None:
-        pass
+        return
 
     authReq = auth.require_auth(request.path, ['/api/v1/status/',
                                                '/api/v1/unauthorized/',
