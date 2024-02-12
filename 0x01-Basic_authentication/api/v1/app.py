@@ -64,4 +64,4 @@ if __name__ == "__main__":
         from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
 
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port)
