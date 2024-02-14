@@ -4,6 +4,7 @@
 """
 from flask import request
 from typing import List, TypeVar
+import re
 
 
 class Auth():
@@ -16,7 +17,14 @@ class Auth():
                 path += '/'
         if excluded_paths is None or len(excluded_paths) == 0:
             return True
-        if path is None or path not in excluded_paths:
+        if path is None:
+            return True
+        found = False
+        for p in excluded_paths:
+            if re.search(p, path):
+                found = True
+                break
+        if not found:
             return True
         return False
 
