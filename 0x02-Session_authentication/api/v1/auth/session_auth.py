@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """session auth file for authenticate"""
 
-from api.v1.auth.auth import Auth
+from api.v1.auth.auth import Auth, getenv
+from flask import request, jsonify
 from typing import TypeVar
 from models.user import User
 from uuid import uuid4
@@ -34,3 +35,16 @@ class SessionAuth(Auth):
         cookie = self.session_cookie(request)
         user_id = self.user_id_for_session_id(cookie)
         return User.get(user_id)
+
+    def destroy_session(self, request=None):
+        """log out func """
+        if request is None:
+            return False
+        cookie = self.session_cookie(request)
+        if cookie is None:
+            return False
+        id = self.user_id_for_session_id(cookie)
+        if id is None:
+            return False
+        del self.user_id_by_session_id[cookie]
+        return True
