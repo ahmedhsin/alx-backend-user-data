@@ -6,9 +6,11 @@ from typing import TypeVar
 from models.user import User
 from uuid import uuid4
 
+
 class SessionAuth(Auth):
     """session auth class"""
     user_id_by_session_id = {}
+
     def create_session(self, user_id: str = None) -> str:
         """create a user session"""
         if user_id is None:
@@ -32,4 +34,3 @@ class SessionAuth(Auth):
         cookie = self.session_cookie()
         user_id = self.user_id_for_session_id(cookie)
         return User.get(user_id)
-    
