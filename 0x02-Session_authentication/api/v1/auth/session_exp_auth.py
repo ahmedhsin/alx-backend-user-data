@@ -6,7 +6,7 @@ from flask import request, jsonify
 from typing import TypeVar
 from models.user import User
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class SessionExpAuth(SessionAuth):
@@ -42,7 +42,8 @@ class SessionExpAuth(SessionAuth):
             return key['user_id']
         if 'created_at' not in key:
             return None
-        created_at = key['created_at'].timestamp()
-        if created_at + self.session_duration < datetime.now().timestamp():
+        created_at = key['created_at']
+        exp = created_at + timedelta(seconds=self.session_duration)
+        if exp < datetime.now():
             return None
         return key['user_id']
