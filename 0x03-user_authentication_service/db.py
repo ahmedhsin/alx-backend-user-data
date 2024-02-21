@@ -34,6 +34,8 @@ class DB:
 
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """find a user by user_id"""
+        if kwargs is None:
+            raise InvalidRequestError
         user = None
         for k, v in kwargs.items():
             if k not in User.__dict__:
