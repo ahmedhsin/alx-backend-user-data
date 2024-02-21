@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from typing import Dict
 from user import Base, User
 
@@ -30,12 +32,16 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def find_user_by(self, user_id: int) -> User:
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """find a user by user_id"""
+        user = None
         try:
-            return self._session.query(User).filter(User.id == user_id).first()
+            user = self._session.query(User).filter_by(**kwargs).first()
         except Exception:
-            raise ValueError("Err occure")
+            raise InvalidRequestError
+        if user is None:
+            raise NoResultFound
+        return user
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """create user method"""
@@ -47,7 +53,7 @@ class DB:
 
     def update_user(self, user_id: str, **kwargs:  Dict[str, str]) -> None:
         """update the user based on user_id"""
-        user = self.find_user_by(user_id)
+        user = self.find_user_by(id=user_id)
         if user is None:
             raise ValueError("usr not found")
         for key, val in kwargs.items():
