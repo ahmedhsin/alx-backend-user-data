@@ -38,9 +38,8 @@ class DB:
         for k, v in kwargs.items():
             if k not in User.__dict__:
                 raise InvalidRequestError
-        try:
-            user = self._session.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if user is None:
             raise NoResultFound
         return user
 
@@ -55,8 +54,6 @@ class DB:
     def update_user(self, user_id: str, **kwargs:  Dict[str, str]) -> None:
         """update the user based on user_id"""
         user = self.find_user_by(id=user_id)
-        if user is None:
-            raise ValueError("usr not found")
         for key, val in kwargs.items():
             if key not in User.__dict__:
                 raise ValueError("argument not in user")
