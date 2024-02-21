@@ -36,11 +36,11 @@ class DB:
         """find a user by user_id"""
         user = None
         try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-        except Exception:
-            raise InvalidRequestError
-        if user is None:
+            user = self._session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
             raise NoResultFound
+        except InvalidRequestError:
+            raise InvalidRequestError
         return user
 
     def add_user(self, email: str, hashed_password: str) -> User:
