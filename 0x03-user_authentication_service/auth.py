@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from db import DB
+from db import DB, NoResultFound
 """Auth class file"""
 
 from user import Base, User
@@ -21,11 +21,11 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         """func to register user"""
-        session = self._db._session
-        user = session.query(User).filter(User.email == email).first()
-        if user:
+        user = None
+        try:
+            self._db.find_user_by(email=email)
             raise ValueError(f"User {email} already exists")
-        user = User(email=email, hashed_password=_hash_password(password))
-        session.add(user)
-        session.commit()
+        except NoResultFound:
+            hashed_password = _hash_password(password)
+            user = self._db.add_user(email, hashed_password)
         return user
