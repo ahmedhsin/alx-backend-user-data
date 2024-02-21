@@ -35,12 +35,13 @@ class DB:
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """find a user by user_id"""
         user = None
+        for k, v in kwargs.items():
+            if k not in User.__dict__:
+                raise InvalidRequestError
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise NoResultFound
-        except InvalidRequestError:
-            raise InvalidRequestError
         return user
 
     def add_user(self, email: str, hashed_password: str) -> User:
