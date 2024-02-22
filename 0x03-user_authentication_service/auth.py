@@ -46,7 +46,7 @@ class Auth:
         except Exception:
             return False
 
-    def create_session(self, email: str) -> str:
+    def create_session(self, email: str) -> Union[str, None]:
         """create a session id and attatch to the user """
         try:
             user = self._db.find_user_by(email=email)
