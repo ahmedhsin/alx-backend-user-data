@@ -18,7 +18,7 @@ def hello_world() -> None:
 
 
 @app.route('/users', methods=['POST'])
-def register_route() -> None:
+def users() -> None:
     """route for registerntion"""
     email = request.form.get('email')
     password = request.form.get('password')
@@ -31,7 +31,7 @@ def register_route() -> None:
 
 
 @app.route('/sessions', methods=['POST'])
-def login_route() -> None:
+def login() -> None:
     """login route"""
     email = request.form.get('email')
     password = request.form.get('password')
@@ -45,13 +45,23 @@ def login_route() -> None:
 
 
 @app.route('/sessions', methods=['DELETE'])
-def logout_route() -> str:
+def logout() -> str:
     """logout route"""
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         Auth.destroy_session(user.id)
         return redirect('/')
+    abort(403)
+
+
+@app.route('/profile', methods=['GET'])
+def profile() -> None:
+    """handle profle route"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        return jsonify({"email": f"{user.email}"})
     abort(403)
 
 
