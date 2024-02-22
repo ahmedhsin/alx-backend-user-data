@@ -55,7 +55,7 @@ class DB:
         """update the user based on user_id"""
         user = self.find_user_by(id=user_id)
         for key, val in kwargs.items():
-            if key not in User.__dict__:
+            if not hasattr(user, key):
                 raise ValueError
             user.key = val
         self._session.commit()
