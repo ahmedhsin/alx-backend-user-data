@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from db import DB, NoResultFound
 """Auth class file"""
 
+from db import DB, NoResultFound
 from user import Base, User
 import bcrypt
 import uuid
@@ -72,5 +72,5 @@ class Auth:
             return None
         try:
             self._db.update_user(user_id, session_id=None)
-        except Exception:
+        except NoResultFound:
             return None
