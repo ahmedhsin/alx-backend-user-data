@@ -2,7 +2,7 @@
 """simple flask api application"""
 
 from flask import Flask, jsonify, request, abort
-from flask import make_response
+from flask import make_response, redirect
 from auth import Auth
 
 
@@ -42,6 +42,17 @@ def login_route() -> None:
     res = make_response({"email": f"email", "message": "logged in"})
     res.set_cookie('session_id', session_id)
     return res
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout_route() -> None:
+    """logout route"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+    Auth.destroy_session(user.id)
+    return redirect('/')
 
 
 if __name__ == "__main__":
