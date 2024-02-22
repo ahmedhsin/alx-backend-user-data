@@ -32,18 +32,16 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
-        """find a user by user_id"""
-        if kwargs is None:
-            raise InvalidRequestError
-        user = None
-        for k, v in kwargs.items():
-            if k not in User.__dict__:
-                raise InvalidRequestError
-        user = self._session.query(User).filter_by(**kwargs).first()
-        if user is None:
-            raise NoResultFound
-        return user
+    def find_user_by(self, **kwargs) -> User:
+        """Finds user by valid argument """
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+
+        except InvalidRequestError as e:
+            raise e
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """create user method"""
@@ -58,6 +56,6 @@ class DB:
         user = self.find_user_by(id=user_id)
         for key, val in kwargs.items():
             if key not in User.__dict__:
-                raise ValueError("argument not in user")
+                raise ValueError
             user.key = val
-        return None
+        self._session.commit()
