@@ -51,7 +51,7 @@ class DB:
         session.commit()
         return new_user
 
-    def update_user(self, user_id: str, **kwargs:  Dict[str, str]) -> None:
+    def update_user(self, user_id: int, **kwargs:  Dict[str, str]) -> None:
         """update the user based on user_id"""
         user = self.find_user_by(id=user_id)
         for key, val in kwargs.items():
