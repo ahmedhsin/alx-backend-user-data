@@ -56,7 +56,7 @@ class Auth:
         except Exception:
             return None
 
-    def get_user_from_session_id(self, session_id: str) -> Union[None, str]:
+    def get_user_from_session_id(self, session_id: str) -> Union[None, User]:
         """get user form session"""
         if session_id is None:
             return None
